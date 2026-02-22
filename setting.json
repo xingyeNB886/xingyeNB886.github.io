@@ -1,8 +1,8 @@
 {
-    "title": "刀客源码网の主页",
-    "description": "一个默默无闻的主页",
-    "keywords": "刀客源码网,个人主页",
-    "author": "刀客源码网",
+    "title": "星野导航站",
+    "description": "一个个人的导航网站",
+    "keywords": "星野导航,个人主页",
+    "author": "星野导航站",
     "logo_img": "./img/icon/logo.png",
     "logo_text_1": "imsyy",
     "logo_text_2": "top",
@@ -12,13 +12,13 @@
     ],
     "des_title_change": [
         "Oops !",
-        "哎呀，这都被你发现了 ( 再点击一次可关闭 )"
+        "哎呀，主人～这都被你发现了喵～ ( 再点击一次可关闭 )"
     ],
-    "github": "imsyy",
-    "qq": "1455112844",
-    "email": "zhiyunlm@qq.com",
-    "telegram": "bottom_user",
-    "twitter": "iimmsyy",
+    "github": "xingyeNB886",
+    "qq": "#",
+    "email": "xiaon5761@GMAIL.COM",
+    "telegram": "xingyejiang",
+    "twitter": "#",
     "weather_api": "https://www.yiketianqi.com/free/day?appid=43656176&appsecret=I42og6Lm&unescape=1",
     "link_1": [
         "https://www.dkewl.com",
@@ -64,6 +64,6 @@
             "https://www.dkewl.com"
         ]
     ],
-    "Copyright_year": "2023",
+    "Copyright_year": "2026",
     "Copyright_text": "刀客源码"
 }
