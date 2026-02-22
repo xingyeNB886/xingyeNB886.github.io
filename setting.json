@@ -15,11 +15,11 @@
         "哎呀，主人～这都被你发现了喵～ ( 再点击一次可关闭 )"
     ],
     "github": "xingyeNB886",
-    "qq": "#",
-    "email": "xiaon5761@GMAIL.COM",
+    "qq": "1455112844", // 替换为有效QQ号（空值或#会导致跳转失效）
+    "email": "xiaon5761@gmail.com",
     "telegram": "xingyejiang",
-    "twitter": "#",
-    "weather_api": "https://www.yiketianqi.com/free/day?appid=43656176&appsecret=I42og6Lm&unescape=1",
+    "twitter": "iimmsyy", // 替换为有效用户名或留空
+    "weather_api": "https://wttr.in/?format=j1", // 原接口解析失败，替换为免费可用接口
     "link_1": [
         "https://www.dkewl.com",
         "fa-solid fa-blog",
@@ -53,15 +53,15 @@
     "wallpaper_api": [
         [
             "每日一图",
-            "https://www.dkewl.com"
+            "https://api.ixiaowai.cn/api/api.php" // 免费壁纸接口，替换原重复链接
         ],
         [
             "信息查询",
-            "https://www.dkewl.com"
+            "https://api.ixiaowai.cn/gqapi/gqapi.php"
         ],
         [
             "图片水印",
-            "https://www.dkewl.com"
+            "https://api.ixiaowai.cn/mcapi/mcapi.php"
         ]
     ],
     "Copyright_year": "2026",
