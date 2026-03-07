@@ -396,11 +396,92 @@
                     </div>
                 </div>
                 
-                <div class="bg-white/5 backdrop-blur-md rounded-2xl shadow-xl p-6 card-hover border border-white/10">
-                    <div class="flex items-center mb-4">
-                        <div class="w-10 h-10 rounded-full bg-techBlue/20 flex items-center justify-center text-techBlue">
-                            <i class="fa fa-newspaper-o"></i>
-                        </div>
+                <div class="bg-white/5 backdrop-blur-md rounded-2xl shadow-xl border border-white/10 overflow-hidden">
+    <!-- 头部（始终可见） -->
+    <div class="p-6">
+        <div class="flex items-center mb-4">
+            <div class="w-10 h-10 rounded-full bg-techBlue/20 flex items-center justify-center text-techBlue">
+                <i class="fa fa-clock-o"></i>
+            </div>
+            <h2 class="ml-3 text-xl font-bold text-white">时间与天气</h2>
+        </div>
+        <div class="text-center">
+            <div id="datetime" class="text-2xl font-bold text-white mb-3">加载中...</div>
+            <div id="weather" class="text-lg text-techBlue/80">天气加载中...</div>
+        </div>
+    </div>
+
+    <!-- 折叠面板（点击展开详细时间与时区） -->
+    <div class="border-t border-white/10">
+        <div id="timeDetailHeader" class="flex justify-between items-center p-4 cursor-pointer hover:bg-white/5 transition-colors">
+            <span class="font-semibold text-techBlue">⏱️ 详细时间与时区</span>
+            <span id="detailArrow" class="transform transition-transform duration-300">▼</span>
+        </div>
+        <div id="timeDetailContent" class="max-h-0 overflow-hidden transition-all duration-300">
+            <!-- 时区选择 -->
+            <div class="p-4 border-t border-white/10">
+                <div class="text-sm text-white/70 mb-2">🌍 时区设置</div>
+                <select id="tzSelect" class="w-full p-2 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-techBlue">
+                    <option value="Asia/Shanghai">中国-北京时间 (UTC+8)</option>
+                    <option value="Asia/Tokyo">日本-东京时间 (UTC+9)</option>
+                    <option value="Asia/Seoul">韩国-首尔 (UTC+9)</option>
+                    <option value="Asia/Singapore">新加坡 (UTC+8)</option>
+                    <option value="Europe/Moscow">俄罗斯-莫斯科 (UTC+3)</option>
+                    <option value="Europe/London">英国-伦敦 (UTC±0)</option>
+                    <option value="Europe/Berlin">德国-柏林 (UTC+1)</option>
+                    <option value="America/New_York">美国-纽约 (UTC-4/-5)</option>
+                    <option value="America/Los_Angeles">美国-洛杉矶 (UTC-7/-8)</option>
+                    <option value="Brazil/East">巴西 (UTC-3)</option>
+                </select>
+            </div>
+
+            <!-- 距离下一分钟 -->
+            <div class="p-4 border-t border-white/10">
+                <div class="flex justify-between text-sm mb-2">
+                    <span>⏱️ 距离下一分钟</span>
+                    <span id="nextMinText" class="text-techBlue">还剩 100% / 59s</span>
+                </div>
+                <div class="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                    <div id="minBar" class="h-full bg-techBlue rounded-full transition-all duration-500" style="width:0%"></div>
+                </div>
+            </div>
+
+            <!-- 距离下一小时 -->
+            <div class="p-4 border-t border-white/10">
+                <div class="flex justify-between text-sm mb-2">
+                    <span>🕒 距离下一小时</span>
+                    <span id="hourText" class="text-techBlue">还剩 50% / 30m 0s</span>
+                </div>
+                <div class="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                    <div id="hourBar" class="h-full bg-techBlue rounded-full transition-all duration-500" style="width:0%"></div>
+                </div>
+            </div>
+
+            <!-- 今日剩余进度 -->
+            <div class="p-4 border-t border-white/10">
+                <div class="flex justify-between text-sm mb-2">
+                    <span>📅 今日剩余进度</span>
+                    <span id="dayText" class="text-techBlue">还剩 50% / 12h 0m 0s</span>
+                </div>
+                <div class="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                    <div id="dayBar" class="h-full bg-techBlue rounded-full transition-all duration-500" style="width:0%"></div>
+                </div>
+            </div>
+
+            <!-- 今年剩余进度 -->
+            <div class="p-4 border-t border-white/10">
+                <div class="flex justify-between text-sm mb-2">
+                    <span>🎆 今年剩余进度</span>
+                    <span id="yearText" class="text-techBlue">还剩 80% / 290d 0h 0m 0s</span>
+                </div>
+                <div class="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                    <div id="yearBar" class="h-full bg-techBlue rounded-full transition-all duration-500" style="width:0%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
                         <h2 class="ml-3 text-xl font-bold text-white">最新更新</h2>
                     </div>
                     
@@ -696,6 +777,98 @@
                 observer.observe(card);
             });
         }
-    </script>
+    // ---------- 时间与时区功能（小白友好版）----------
+let currentTz = localStorage.getItem("tz") || "Asia/Shanghai";
+
+// 获取当前时区的时间
+function getNow() {
+    return new Date(new Date().toLocaleString("en-US", { timeZone: currentTz }));
+}
+
+// 更新所有时间显示
+function updateAllTime() {
+    const now = getNow();
+    const h = now.getHours(),
+        m = now.getMinutes(),
+        s = now.getSeconds();
+
+    // 更新顶部日期时间
+    document.getElementById("datetime").textContent = now.toLocaleString('zh-CN', {
+        year: 'numeric', month: 'long', day: 'numeric',
+        weekday: 'long', hour: '2-digit', minute: '2-digit', second: '2-digit'
+    });
+
+    // 距离下一分钟
+    const leftMinSec = 60 - s;
+    const minPer = (leftMinSec / 60) * 100;
+    document.getElementById("minBar").style.width = minPer + "%";
+    document.getElementById("nextMinText").innerText = `还剩 ${minPer.toFixed(1)}% / ${leftMinSec}s`;
+
+    // 距离下一小时
+    const leftHSec = 3600 - (m * 60 + s);
+    const hPer = (leftHSec / 3600) * 100;
+    const leftHMin = Math.floor(leftHSec / 60);
+    const leftHS = leftHSec % 60;
+    document.getElementById("hourBar").style.width = hPer + "%";
+    document.getElementById("hourText").innerText = `距离${h+1}点还剩 ${hPer.toFixed(1)}% / ${leftHMin}m ${leftHS}s`;
+
+    // 今日剩余
+    const leftDaySec = 86400 - (h*3600 + m*60 + s);
+    const dPer = (leftDaySec / 86400) * 100;
+    const dh = Math.floor(leftDaySec / 3600);
+    const dm = Math.floor((leftDaySec % 3600) / 60);
+    const ds = leftDaySec % 60;
+    document.getElementById("dayBar").style.width = dPer + "%";
+    document.getElementById("dayText").innerText = `今天还剩 ${dPer.toFixed(1)}% / ${dh}h ${dm}m ${ds}s`;
+
+    // 今年剩余
+    const y = now.getFullYear();
+    const startYear = new Date(y, 0, 1);
+    const endYear = new Date(y+1, 0, 1);
+    const leftYearMS = endYear - now;
+    const totalYearMS = endYear - startYear;
+    const yPer = (leftYearMS / totalYearMS) * 100;
+    const yd = Math.floor(leftYearMS / 86400000);
+    const yh = Math.floor((leftYearMS % 86400000) / 3600000);
+    const ym = Math.floor((leftYearMS % 3600000) / 60000);
+    const ys = Math.floor((leftYearMS % 60000) / 1000);
+    document.getElementById("yearBar").style.width = yPer + "%";
+    document.getElementById("yearText").innerText = `今年还剩 ${yPer.toFixed(1)}% / ${yd}d ${yh}h ${ym}m ${ys}s`;
+}
+
+// 折叠面板开关
+const detailHeader = document.getElementById("timeDetailHeader");
+const detailContent = document.getElementById("timeDetailContent");
+const detailArrow = document.getElementById("detailArrow");
+if (detailHeader) {
+    detailHeader.addEventListener("click", () => {
+        if (detailContent.classList.contains("max-h-0")) {
+            detailContent.classList.remove("max-h-0");
+            detailContent.classList.add("max-h-[500px]");
+            detailArrow.style.transform = "rotate(180deg)";
+        } else {
+            detailContent.classList.add("max-h-0");
+            detailContent.classList.remove("max-h-[500px]");
+            detailArrow.style.transform = "rotate(0deg)";
+        }
+    });
+}
+
+// 时区切换
+const tzSelect = document.getElementById("tzSelect");
+if (tzSelect) {
+    tzSelect.value = currentTz;
+    tzSelect.addEventListener("change", (e) => {
+        currentTz = e.target.value;
+        localStorage.setItem("tz", currentTz);
+        updateAllTime();
+    });
+}
+
+// 启动定时器（每秒更新）
+updateAllTime();
+setInterval(updateAllTime, 1000);
+
+</script>
 </body>
 </html>
